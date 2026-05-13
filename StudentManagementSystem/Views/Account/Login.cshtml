@@ -1,0 +1,58 @@
+@model StudentManagementSystem.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-brand">
+            <div class="auth-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>Student Management</h1>
+                <p>Sign in to your account</p>
+            </div>
+        </div>
+
+        <form asp-action="Login" asp-controller="Account" method="post" class="auth-form">
+            @Html.AntiForgeryToken()
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    <div asp-validation-summary="All"></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email Address</label>
+                <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+                <span asp-validation-for="Email" class="text-danger small d-block mt-1"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NationalId" class="form-label">National ID</label>
+                <input asp-for="NationalId" class="form-control" placeholder="Your National ID" />
+                <span asp-validation-for="NationalId" class="text-danger small d-block mt-1"></span>
+            </div>
+
+            <button type="submit" class="btn-brand w-100" style="justify-content: center;">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                Sign In
+            </button>
+        </form>
+
+        <p class="text-center mt-4 text-muted" style="font-size: 13px;">
+            <i class="fa-solid fa-info-circle me-1"></i>
+            Demo: Use your email and national ID to login
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

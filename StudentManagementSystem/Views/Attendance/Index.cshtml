@@ -1,0 +1,77 @@
+@model IEnumerable<StudentManagementSystem.Models.AttendanceSession>
+@{
+    ViewData["Title"] = "Attendance Sessions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var sessions = Model.ToList();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Attendance Sessions</h1>
+        <p>All uploaded attendance records and sessions</p>
+    </div>
+    <div class="header-actions">
+        <a asp-action="Upload" asp-controller="Teacher" class="btn-brand">
+            <i class="fa-solid fa-file-arrow-up"></i>
+            New Upload
+        </a>
+    </div>
+</div>
+
+<div class="summary-grid">
+    <div class="summary-card">
+        <i class="fa-solid fa-list-check" style="color: #4f8ef7; font-size: 20px; margin-bottom: 8px;"></i>
+        <span>Total Sessions</span>
+        <strong>@sessions.Count</strong>
+    </div>
+    <div class="summary-card success">
+        <i class="fa-solid fa-calendar-alt" style="color: var(--success); font-size: 20px; margin-bottom: 8px;"></i>
+        <span>Recent Sessions</span>
+        <strong>@sessions.Where(s => s.CreatedAt >= DateTime.Now.AddDays(-7)).Count()</strong>
+    </div>
+</div>
+
+<div class="profile-card">
+    @if (sessions.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Teacher</th>
+                        <th>File</th>
+                        <th>Uploaded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var session in sessions.OrderByDescending(s => s.CreatedAt))
+                    {
+                        <tr>
+                            <td>
+                                <strong>@session.CourseTitle</strong>
+                            </td>
+                            <td>@session.AttendanceDate.ToString("MMM dd, yyyy")</td>
+                            <td>@session.Teacher?.Name</td>
+                            <td>
+                                <i class="fa-solid fa-file-excel me-1" style="color: #16a34a;"></i>
+                                @session.UploadedFileName
+                            </td>
+                            <td>
+                                <small class="text-muted">@session.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <i class="fa-solid fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p>No attendance sessions found</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,93 @@
+@model List<Teacher>
+@{
+    ViewData["Title"] = "Teacher Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Teacher Management</h1>
+        <p>Manage and monitor all teachers</p>
+    </div>
+    <div class="header-actions">
+        <a asp-controller="Admin" asp-action="TeacherCreate" class="btn-brand">
+            <i class="fa-solid fa-circle-plus"></i> Add Teacher
+        </a>
+    </div>
+</div>
+
+<div class="profile-card">
+    <div class="search-box mb-3">
+        <input type="text" id="searchInput" placeholder="Search by name or ID..." class="form-control">
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>National ID</th>
+                        <th>Position</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    @foreach (var teacher in Model)
+                    {
+                        <tr class="teacher-row" data-name="@(teacher.Name?.ToLower() ?? "")" data-national-id="@(teacher.NationalId?.ToLower() ?? "")">
+                            <td>
+                                <strong>@teacher.Name</strong>
+                            </td>
+                            <td>@teacher.Email</td>
+                            <td>@teacher.NationalId</td>
+                            <td>@teacher.Position</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-controller="Admin" asp-action="TeacherEdit" asp-route-teacherId="@teacher.TeacherId" class="icon-btn edit-btn" title="Edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <form asp-controller="Admin" asp-action="DeleteTeacher" asp-route-teacherId="@teacher.TeacherId" method="post" style="display: inline;" onsubmit="return confirm('Delete this teacher?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="icon-btn delete-btn" title="Delete">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <i class="fa-solid fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p>No teachers found</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.teacher-row');
+
+            rows.forEach(row => {
+                const name = row.dataset.name;
+                const nationalId = row.dataset.nationalId;
+
+                if (name.includes(searchTerm) || nationalId.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

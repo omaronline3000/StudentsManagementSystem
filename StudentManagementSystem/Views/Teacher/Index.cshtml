@@ -1,0 +1,82 @@
+@model IEnumerable<StudentManagementSystem.Models.Teacher>
+@{
+    ViewData["Title"] = "Teachers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teachers = Model.ToList();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Teachers</h1>
+        <p>View all active teachers in the system</p>
+    </div>
+</div>
+
+<div class="profile-card">
+    <div class="search-box mb-3">
+        <input type="text" id="searchInput" placeholder="Search by name or ID..." class="form-control" />
+    </div>
+
+    @if (teachers.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Position</th>
+                        <th>National ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var teacher in teachers)
+                    {
+                        <tr>
+                            <td><strong>@teacher.Name</strong></td>
+                            <td>@teacher.Email</td>
+                            <td>@teacher.Position</td>
+                            <td>@teacher.NationalId</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-action="Details" asp-route-id="@teacher.TeacherId" class="icon-btn edit-btn" title="View">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@teacher.TeacherId" class="icon-btn edit-btn" title="Edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <i class="fa-solid fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p>No teachers found</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

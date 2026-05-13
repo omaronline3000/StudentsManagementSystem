@@ -1,0 +1,93 @@
+@model IEnumerable<StudentManagementSystem.ViewModels.StudentAttendanceRecordViewModel>
+@{
+    ViewData["Title"] = "Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var studentName = ViewBag.StudentName as string ?? "Student";
+    var records = Model.ToList();
+}
+
+<div class="page-header">
+    <div>
+        <h1>@studentName - Attendance Records</h1>
+        <p>Complete attendance history for this student</p>
+    </div>
+    <div class="header-actions">
+        <a asp-action="Profile" class="btn-outline-brand">
+            <i class="fa-solid fa-arrow-left"></i> Back to Profile
+        </a>
+    </div>
+</div>
+
+<div class="summary-grid">
+    <div class="summary-card">
+        <i class="fa-solid fa-id-card" style="color: #4f8ef7; font-size: 20px; margin-bottom: 8px;"></i>
+        <span>Student ID</span>
+        <strong>@ViewBag.StudentId</strong>
+    </div>
+    <div class="summary-card success">
+        <i class="fa-solid fa-list-check" style="color: var(--success); font-size: 20px; margin-bottom: 8px;"></i>
+        <span>Total Records</span>
+        <strong>@records.Count</strong>
+    </div>
+    <div class="summary-card success">
+        <i class="fa-solid fa-check-circle" style="color: var(--success); font-size: 20px; margin-bottom: 8px;"></i>
+        <span>Present</span>
+        <strong>@records.Count(r => r.IsPresent)</strong>
+    </div>
+    <div class="summary-card danger">
+        <i class="fa-solid fa-times-circle" style="color: var(--danger); font-size: 20px; margin-bottom: 8px;"></i>
+        <span>Absent</span>
+        <strong>@records.Count(r => !r.IsPresent)</strong>
+    </div>
+</div>
+
+<div class="profile-card">
+    @if (records.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Teacher</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in records.OrderByDescending(r => r.AttendanceDate))
+                    {
+                        <tr>
+                            <td>
+                                <strong>@record.CourseTitle</strong>
+                            </td>
+                            <td>@record.AttendanceDate.ToString("MMM dd, yyyy")</td>
+                            <td>@record.TeacherName</td>
+                            <td>
+                                @if (record.IsPresent)
+                                {
+                                    <span class="status-badge present">
+                                        <i class="fa-solid fa-check-circle me-1"></i>Present
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge absent">
+                                        <i class="fa-solid fa-times-circle me-1"></i>Absent
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <i class="fa-solid fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p>No attendance records found</p>
+        </div>
+    }
+</div>

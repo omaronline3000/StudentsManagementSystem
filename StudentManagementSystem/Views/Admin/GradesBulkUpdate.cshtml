@@ -1,0 +1,81 @@
+@model List<Student>
+@{
+    ViewData["Title"] = "Bulk Update GPAs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="top-bar">
+    <h1>Bulk Update GPAs</h1>
+    <a asp-controller="Admin" asp-action="Students" class="btn btn-secondary btn-sm">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="table-container">
+            <form asp-action="GradesBulkUpdate" method="post" id="bulkUpdateForm">
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Current GPA</th>
+                                <th>New GPA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                @foreach (var student in Model)
+                                {
+                                    <tr>
+                                        <td>@student.StudentId</td>
+                                        <td>@student.Name</td>
+                                        <td>
+                                            @if (student.TotalGrade.HasValue)
+                                            {
+                                                <span class="role-badge">@student.TotalGrade.Value.ToString("F2")</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
+                                        </td>
+                                        <td style="padding: 10px;">
+                                            <input type="number" 
+                                                   name="gradeUpdates[@student.StudentId]" 
+                                                   step="0.01" 
+                                                   min="0" 
+                                                   max="4" 
+                                                   class="form-control form-control-sm"
+                                                   placeholder="Leave blank to skip">
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" style="text-align:center; padding:30px; color:#999;">
+                                        No students found.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-3 p-3">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="fa-solid fa-save"></i> Update All GPAs
+                    </button>
+                    <a asp-controller="Admin" asp-action="Students" class="btn btn-secondary btn-sm">
+                        <i class="fa-solid fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

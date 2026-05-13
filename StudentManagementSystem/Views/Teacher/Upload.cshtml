@@ -1,0 +1,90 @@
+@model StudentManagementSystem.ViewModels.AttendanceUploadViewModel
+@{
+    ViewData["Title"] = "Upload Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Upload Attendance</h1>
+        <p>Upload an Excel file with the names of students who attended the session</p>
+    </div>
+    <div class="header-actions">
+        <a asp-action="Profile" class="btn-outline-brand">
+            <i class="fa-solid fa-arrow-left"></i> Back to Profile
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="profile-card">
+            <form asp-action="Upload" asp-controller="Attendance" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="TeacherId" />
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i>
+                        <div asp-validation-summary="All"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <div class="mb-4">
+                    <label asp-for="CourseTitle" class="form-label">
+                        <i class="fa-solid fa-book me-2"></i>Course Title
+                    </label>
+                    <input asp-for="CourseTitle" class="form-control" placeholder="e.g. Database Systems" />
+                    <span asp-validation-for="CourseTitle" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="AttendanceDate" class="form-label">
+                        <i class="fa-solid fa-calendar me-2"></i>Attendance Date
+                    </label>
+                    <input asp-for="AttendanceDate" class="form-control" type="date" />
+                    <span asp-validation-for="AttendanceDate" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ExcelFile" class="form-label">
+                        <i class="fa-solid fa-file-excel me-2"></i>Select Excel File
+                    </label>
+                    <div class="file-input-wrapper">
+                        <input asp-for="ExcelFile" class="form-control" type="file" accept=".xlsx,.xlsm" />
+                        <small class="text-muted d-block mt-2">
+                            <i class="fa-solid fa-info-circle me-1"></i>
+                            Place student names in Column A of the Excel file
+                        </small>
+                    </div>
+                    <span asp-validation-for="ExcelFile" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-brand w-100" style="justify-content: center;">
+                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                        Upload File
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-4 pt-3" style="border-top: 1px solid #e8edf5;">
+                <h5 style="font-size: 14px; font-weight: 600; color: #1a2235; margin-bottom: 12px;">
+                    <i class="fa-solid fa-lightbulb me-2" style="color: #f59e0b;"></i>File Format Requirements
+                </h5>
+                <ul style="font-size: 13px; color: #64748b; margin-bottom: 0; padding-left: 20px;">
+                    <li>File format: .xlsx or .xlsm</li>
+                    <li>Student names must be in Column A</li>
+                    <li>One name per row</li>
+                    <li>Names should match existing student records</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <p>System overview and statistics</p>
+    </div>
+</div>
+
+<div class="summary-grid">
+    <div class="summary-card">
+        <i class="fa-solid fa-graduation-cap" style="font-size: 24px; color: var(--accent); margin-bottom: 12px;"></i>
+        <span>Total Students</span>
+        <strong>@ViewBag.TotalStudents</strong>
+    </div>
+    <div class="summary-card">
+        <i class="fa-solid fa-chalkboard-user" style="font-size: 24px; color: var(--success); margin-bottom: 12px;"></i>
+        <span>Total Teachers</span>
+        <strong>@ViewBag.TotalTeachers</strong>
+    </div>
+    <div class="summary-card">
+        <i class="fa-solid fa-calendar-check" style="font-size: 24px; color: #f59e0b; margin-bottom: 12px;"></i>
+        <span>Sessions</span>
+        <strong>@ViewBag.TotalAttendanceSessions</strong>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="profile-card">
+            <h2>
+                <i class="fa-solid fa-chart-simple me-2"></i>
+                System Statistics
+            </h2>
+            <div class="profile-list">
+                <div>
+                    <span><i class="fa-solid fa-users me-2"></i>Total Users</span>
+                    <strong>@(ViewBag.TotalStudents + ViewBag.TotalTeachers)</strong>
+                </div>
+                <div>
+                    <span><i class="fa-solid fa-calendar-days me-2"></i>Attendance Records</span>
+                    <strong>@ViewBag.TotalAttendanceRecords</strong>
+                </div>
+                <div>
+                    <span><i class="fa-solid fa-check-double me-2"></i>System Status</span>
+                    <strong><span class="status-badge present">Online</span></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="profile-card">
+            <h2>
+                <i class="fa-solid fa-gears me-2"></i>Quick Actions
+            </h2>
+            <div class="profile-list">
+                <a asp-controller="Admin" asp-action="GradesBulkUpdate" class="d-flex justify-content-between align-items-center p-3 rounded" style="background: #f8f9fc; text-decoration: none;">
+                    <span style="color: #64748b;"><i class="fa-solid fa-pen me-2"></i>Bulk Update Grades</span>
+                    <i class="fa-solid fa-arrow-right" style="color: var(--accent);"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+@model List<Student>
+@{
+    ViewData["Title"] = "Student Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Student Management</h1>
+        <p>Manage and monitor all students</p>
+    </div>
+    <div class="header-actions">
+        <a asp-controller="Admin" asp-action="StudentCreate" class="btn-brand">
+            <i class="fa-solid fa-circle-plus"></i> Add Student
+        </a>
+    </div>
+</div>
+
+<div class="profile-card">
+    <div class="search-box mb-3">
+        <input type="text" id="searchInput" placeholder="Search by name or ID..." class="form-control">
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>National ID</th>
+                        <th>GPA</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    @foreach (var student in Model)
+                    {
+                        <tr class="student-row" data-name="@(student.Name?.ToLower() ?? "")" data-national-id="@(student.NationalId?.ToLower() ?? "")">
+                            <td>
+                                <strong>@student.Name</strong>
+                            </td>
+                            <td>@student.Email</td>
+                            <td>@student.NationalId</td>
+                            <td>
+                                @if (student.TotalGrade.HasValue)
+                                {
+                                    <span class="status-badge present">@student.TotalGrade.Value.ToString("F2")</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                        <a asp-controller="Admin" asp-action="StudentEdit" asp-route-studentId="@student.StudentId" class="icon-btn edit-btn" title="Edit">
+                                            <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <form asp-controller="Admin" asp-action="DeleteStudent" asp-route-studentId="@student.StudentId" method="post" style="display: inline;" onsubmit="return confirm('Delete this student?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="icon-btn delete-btn" title="Delete">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <i class="fa-solid fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p>No students found</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.student-row');
+
+            rows.forEach(row => {
+                const name = row.dataset.name;
+                const nationalId = row.dataset.nationalId;
+
+                if (name.includes(searchTerm) || nationalId.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

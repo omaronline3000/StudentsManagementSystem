@@ -1,0 +1,62 @@
+@model StudentManagementSystem.Models.Student
+@{
+    ViewData["Title"] = "Student Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>@Model.Name</h1>
+        <p>Student information and academic details</p>
+    </div>
+    <div class="header-actions">
+        <a asp-action="Attendance" asp-route-id="@Model.StudentId" class="btn-brand">
+            <i class="fa-solid fa-calendar-check"></i>
+            View Attendance
+        </a>
+        <a asp-action="Index" class="btn-outline-brand">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="profile-card">
+            <h2><i class="fa-solid fa-user me-2"></i>Personal Information</h2>
+            <div class="profile-list">
+                <div><span>Email</span><strong>@Model.Email</strong></div>
+                <div><span>Address</span><strong>@Model.Address</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="profile-card">
+            <h2><i class="fa-solid fa-graduation-cap me-2"></i>Academic Information</h2>
+            <div class="profile-list">
+                <div>
+                    <span>Total Grade</span>
+                    <strong class="text-success">
+                        @if (Model.TotalGrade.HasValue)
+                        {
+                            @Model.TotalGrade.Value.ToString("F2")
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </strong>
+                </div>
+                <div>
+                    <span>Status</span>
+                    <strong>
+                        <span class="status-badge present">
+                            <i class="fa-solid fa-check-circle me-1"></i>Active
+                        </span>
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

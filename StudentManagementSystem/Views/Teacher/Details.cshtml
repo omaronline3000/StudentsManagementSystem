@@ -1,0 +1,46 @@
+@model StudentManagementSystem.Models.Teacher
+@{
+    ViewData["Title"] = "Teacher Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>@Model.Name</h1>
+        <p>Teacher profile and assignment information.</p>
+    </div>
+    <div class="header-actions">
+        <a asp-action="Edit" asp-route-id="@Model.TeacherId" class="btn btn-brand">
+            <i class="fa-regular fa-pen-to-square"></i>
+            Edit
+        </a>
+        <a asp-action="Profile" class="btn btn-outline-brand">My Profile</a>
+    </div>
+</div>
+
+<div class="info-grid">
+    <div class="info-card">
+        <span>Teacher ID</span>
+        <strong>@Model.TeacherId</strong>
+    </div>
+    <div class="info-card">
+        <span>Name</span>
+        <strong>@Model.Name</strong>
+    </div>
+    <div class="info-card">
+        <span>Position</span>
+        <strong>@Model.Position</strong>
+    </div>
+    <div class="info-card">
+        <span>Email</span>
+        <strong>@Model.Email</strong>
+    </div>
+    <div class="info-card">
+        <span>National ID</span>
+        <strong>@Model.NationalId</strong>
+    </div>
+    <div class="info-card">
+        <span>Address</span>
+        <strong>@Model.Address</strong>
+    </div>
+</div>

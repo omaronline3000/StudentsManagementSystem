@@ -1,0 +1,83 @@
+@model StudentManagementSystem.ViewModels.StudentProfileViewModel
+@{
+    ViewData["Title"] = "Student Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Welcome, @Model.Student.Name</h1>
+        <p>Your attendance and grade overview</p>
+    </div>
+    <div class="header-actions">
+        <a asp-action="Attendance" asp-route-id="@Model.Student.StudentId" class="btn-brand">
+            <i class="fa-solid fa-calendar-check"></i>
+            View Full Attendance
+        </a>
+    </div>
+</div>
+
+<div class="content-grid">
+    <section class="profile-card">
+        <h2><i class="fa-solid fa-user me-2"></i>My Information</h2>
+        <div class="profile-list">
+            <div><span>Email</span><strong>@Model.Student.Email</strong></div>
+            <div><span>Address</span><strong>@Model.Student.Address</strong></div>
+            <div><span>GPA</span><strong class="text-success">@(Model.Student.TotalGrade?.ToString("F2") ?? "—")</strong></div>
+        </div>
+    </section>
+
+    <section class="table-card">
+        <div class="card-head">
+            <h2><i class="fa-solid fa-clock-list me-2"></i>Recent Attendance</h2>
+            <a asp-action="Attendance" asp-route-id="@Model.Student.StudentId" class="link-action">View all →</a>
+        </div>
+
+        @if (Model.AttendanceRecords.Any())
+        {
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Date</th>
+                            <th>Teacher</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var record in Model.AttendanceRecords)
+                        {
+                            <tr>
+                                <td><strong>@record.CourseTitle</strong></td>
+                                <td>@record.AttendanceDate.ToString("MMM dd, yyyy")</td>
+                                <td>@record.TeacherName</td>
+                                <td>
+                                    @if (record.IsPresent)
+                                    {
+                                        <span class="status-badge present">
+                                            <i class="fa-solid fa-check-circle me-1"></i>Present
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge absent">
+                                            <i class="fa-solid fa-times-circle me-1"></i>Absent
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div style="text-align: center; padding: 30px 20px; color: #64748b;">
+                <i class="fa-solid fa-inbox" style="font-size: 28px; margin-bottom: 8px; display: block; opacity: 0.5;"></i>
+                <p>No attendance records yet</p>
+            </div>
+        }
+    </section>
+</div>

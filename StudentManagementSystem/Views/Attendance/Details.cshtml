@@ -1,0 +1,62 @@
+@model StudentManagementSystem.Models.AttendanceSession
+@{
+    ViewData["Title"] = "Attendance Session";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>@Model.CourseTitle</h1>
+        <p>@Model.AttendanceDate.ToString("yyyy-MM-dd") - @Model.Teacher?.Name</p>
+    </div>
+</div>
+
+<div class="info-grid mb-4">
+    <div class="info-card">
+        <span>Session ID</span>
+        <strong>@Model.SessionId</strong>
+    </div>
+    <div class="info-card">
+        <span>Teacher</span>
+        <strong>@Model.Teacher?.Name</strong>
+    </div>
+    <div class="info-card">
+        <span>Uploaded File</span>
+        <strong>@Model.UploadedFileName</strong>
+    </div>
+    <div class="info-card">
+        <span>Created At</span>
+        <strong>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</strong>
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in Model.AttendanceRecords)
+                {
+                    <tr>
+                        <td>@record.Student?.Name</td>
+                        <td>
+                            @if (record.IsPresent)
+                            {
+                                <span class="status-badge present">Present</span>
+                            }
+                            else
+                            {
+                                <span class="status-badge absent">Absent</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

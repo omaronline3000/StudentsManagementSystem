@@ -1,0 +1,57 @@
+@model StudentManagementSystem.ViewModels.AttendanceUploadViewModel
+@{
+    ViewData["Title"] = "Upload Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Upload Attendance</h1>
+        <p>Upload an Excel file that contains the names of the students who attended.</p>
+    </div>
+    <div class="header-actions">
+        <a asp-controller="Teacher" asp-action="Profile" class="btn btn-outline-brand">Back to Profile</a>
+    </div>
+</div>
+
+<div class="form-card">
+    <form asp-action="Upload" asp-controller="Attendance" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="TeacherId" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="CourseTitle" class="form-label"></label>
+                <input asp-for="CourseTitle" class="form-control" placeholder="e.g. Database Systems" />
+                <span asp-validation-for="CourseTitle" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="AttendanceDate" class="form-label"></label>
+                <input asp-for="AttendanceDate" class="form-control" type="date" />
+                <span asp-validation-for="AttendanceDate" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="ExcelFile" class="form-label"></label>
+                <input asp-for="ExcelFile" class="form-control" type="file" accept=".xlsx,.xlsm" />
+                <span asp-validation-for="ExcelFile" class="text-danger"></span>
+                <small class="text-muted">Column A should contain student names only.</small>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-brand">
+                <i class="fa-solid fa-upload"></i>
+                Upload
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
